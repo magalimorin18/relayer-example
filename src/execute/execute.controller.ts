@@ -1,18 +1,15 @@
 import express, { Request, Response } from "express";
-import { ExecutePayload } from "./interface";
+import { ExecutePayload } from "../interface";
 import httpStatus from "http-status";
 import { executeTransaction } from "./execute.service";
 
 const executeController = express.Router();
 
 const execute = async (req: Request, res: Response) => {
-  const { universalProfileAddress, transaction } = req.body as ExecutePayload;
+  const { address, transaction } = req.body as ExecutePayload;
 
   try {
-    const transactionHash = await executeTransaction(
-      universalProfileAddress,
-      transaction
-    );
+    const transactionHash = await executeTransaction(address, transaction);
     res.send({ transactionHash });
   } catch (error: any) {
     console.log(

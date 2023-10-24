@@ -1,12 +1,88 @@
-import { Transaction } from "./interface";
+import { BigNumber, Wallet, ethers } from "ethers";
+import {
+  LSP6KeyManager__factory,
+  UniversalProfile__factory,
+  LSP6KeyManagerInit__factory,
+} from "../../types/ethers-v5";
+
+import { getProvider } from "../libs/ethers.service";
+import { TransactionParameters } from "../interface";
+import { transactionGate, waitForTransaction } from "../libs/listener.service";
+import { signTransaction } from "../libs/signer.service";
 
 export const executeTransaction = async (
-  universalProfileAddress: string,
-  transaction: Transaction
+  address: string,
+  transaction: TransactionParameters
 ) => {
-  console.log("executing Transaction");
-  console.log(universalProfileAddress);
-  console.log(transaction);
+  console.log(`📥 Received execute request for Universal Profile ${address}`);
 
-  return "0x...";
+  transactionGate();
+
+  const { signature, nonce, abi } = transaction;
+
+  const provider = getProvider();
+  const lsp6Interface = LSP6KeyManagerInit__factory.createInterface();
+
+  const universalProfile = UniversalProfile__factory.connect(address, provider);
+  const keyManagerAddress = await universalProfile.owner();
+  const keyManager = LSP6KeyManager__factory.connect(
+    keyManagerAddress,
+    provider
+  );
+
+  const validityTimestamps = 0;
+
+  let gasLimit: BigNumber;
+  try {
+    gasLimit = await keyManager.estimateGas.executeRelayCall(
+      transaction.signature,
+      transaction.nonce,
+      validityTimestamps,
+      transaction.abi
+    );
+  } catch (error) {
+    gasLimit = new BigNumber(3000000, "0x0103e8");
+    console.log(
+      "⏭️ Unable to estimate gas. Setting default value to gas Limit"
+    );
+  }
+
+  const transactionData = lsp6Interface.encodeFunctionData("executeRelayCall", [
+    signature,
+    nonce,
+    validityTimestamps,
+    abi,
+  ]);
+
+  const signedTransaction = await signTransaction(
+    {
+      to: keyManagerAddress,
+      transactionData,
+      gasLimit,
+    },
+    provider
+  );
+
+  let transactionResponse: ethers.providers.TransactionResponse;
+  try {
+    transactionResponse = await provider.sendTransaction(
+      signedTransaction.signerSignature
+    );
+  } catch (error) {
+    throw Error(`❌ Error sending transaction to the blockchain. ${error}`);
+  }
+
+  console.log("⏳ Waiting for transaction to be mined...");
+
+  await waitForTransaction(transactionResponse);
+
+  const transactionHash = ethers.utils.keccak256(
+    signedTransaction.signerSignature
+  );
+
+  console.log(
+    `🎉 Successfully sent transaction: https://explorer.execution.testnet.lukso.network/tx/${transactionHash}`
+  );
+
+  return transactionHash;
 };
