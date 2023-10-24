@@ -1,9 +1,10 @@
 import express, { Express, Request, Response } from "express";
 import http from "http";
 import { AddressInfo } from "net";
+import executeController from "./execute/execute.controller";
 
-const host = process.env.API_HOST || "0.0.0.0";
-const port = process.env.API_PORT || "3000";
+const host = process.env.HOST || "0.0.0.0";
+const port = process.env.PORT || "3000";
 
 const createApp = () => {
   const app: Express = express();
@@ -24,6 +25,8 @@ const createApp = () => {
 
 const startServer = () => {
   const app = createApp();
+
+  app.use("/", executeController);
 
   const server = http.createServer(app).listen({ host, port }, () => {
     const serverInfo = server.address() as AddressInfo;
