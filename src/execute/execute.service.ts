@@ -18,7 +18,7 @@ export const executeTransaction = async (
 
   transactionGate();
 
-  const { signature, nonce, abi } = transaction;
+  const { signature, nonce, abi, validityTimestamps } = transaction;
 
   const provider = getProvider();
   const lsp6Interface = LSP6KeyManagerInit__factory.createInterface();
@@ -29,8 +29,6 @@ export const executeTransaction = async (
     keyManagerAddress,
     provider
   );
-
-  const validityTimestamps = 0;
 
   let gasLimit: BigNumber;
   try {

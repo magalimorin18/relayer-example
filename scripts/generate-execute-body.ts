@@ -5,7 +5,7 @@ import {
   UniversalProfile__factory,
 } from "../types/ethers-v5";
 import { EIP191Signer } from "@lukso/eip191-signer.js";
-import { CHAIN_ID, SIGNER_PRIVATE_KEY, UP_ADDRESS } from "../src/globals";
+import { CHAIN_ID, USER_PRIVATE_KEY, UP_ADDRESS } from "../src/globals";
 
 export const generateExecuteParameters = async () => {
   const provider = getProvider();
@@ -23,7 +23,7 @@ export const generateExecuteParameters = async () => {
     keyManagerAddress,
     provider
   );
-  const wallet = new Wallet(SIGNER_PRIVATE_KEY, provider);
+  const wallet = new Wallet(USER_PRIVATE_KEY, provider);
   const walletAddress = wallet.address; /// Need permission on UP_ADDRESS
   console.log(`💳 Wallet address signing transaction : ${walletAddress}`);
 
@@ -41,13 +41,15 @@ export const generateExecuteParameters = async () => {
     "0xcafecafe",
   ]);
 
+  const validityTimestamps = 0;
+
   const message = ethers.utils.solidityPack(
     ["uint256", "uint256", "uint256", "uint256", "uint256", "bytes"],
     [
       25, // LSP25 Version
       CHAIN_ID,
       nonce,
-      0, // validity timestamps
+      validityTimestamps,
       0, // the amount of native tokens to transfer (in Wei)
       abiPayload,
     ]
@@ -57,13 +59,14 @@ export const generateExecuteParameters = async () => {
   const { signature } = eip191Signer.signDataWithIntendedValidator(
     keyManagerAddress,
     message,
-    SIGNER_PRIVATE_KEY // This address needs permissions on the UP_ADDRESS
+    USER_PRIVATE_KEY // This address needs permissions on the UP_ADDRESS
   );
 
   const transactionObject = {
     abi: abiPayload,
     signature: signature,
     nonce, // Nonce has to be a Big number
+    validityTimestamps,
   };
 
   return {
