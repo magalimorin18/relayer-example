@@ -17,7 +17,7 @@ const execute = async (req: Request, res: Response) => {
       error.message
     );
     if (error.message.includes("Transaction in progress")) {
-      res.status(httpStatus.TOO_MANY_REQUESTS).send(error.message);
+      res.status(httpStatus.TOO_MANY_REQUESTS).send({ message: error.message });
       return;
     }
 

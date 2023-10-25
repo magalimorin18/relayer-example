@@ -1,12 +1,11 @@
 import axios from "axios";
-import { executeTransaction } from "../src/execute/execute.service";
 import {
   CHAIN_ID,
   RELAYER_BASE_URL,
   SIGNER_PRIVATE_KEY,
   UP_ADDRESS,
 } from "../src/globals";
-import { generateExecuteBody } from "./body";
+import { generateExecuteParameters } from "./generate-execute-body";
 
 const checkEnvVariables = () => {
   if (!UP_ADDRESS) {
@@ -22,14 +21,16 @@ const checkEnvVariables = () => {
 
 const main = async () => {
   checkEnvVariables();
-  const executeBody = await generateExecuteBody();
+  const body = await generateExecuteParameters();
 
   let response;
   try {
-    console.log("🏁 Generating executeRelayCall request ...");
-    response = await axios.post(RELAYER_BASE_URL + "/execute", executeBody);
-  } catch (error) {
-    console.log(`❌ Error executing /execute endpoint ${error}`);
+    console.log("🏁 Sending executeRelayCall request ...");
+    response = await axios.post(RELAYER_BASE_URL + "/execute", body);
+  } catch (error: any) {
+    console.log(
+      `❌ Error executing /execute endpoint: ${error.response.data.message}`
+    );
     return;
   }
 

@@ -7,7 +7,7 @@ import {
 import { EIP191Signer } from "@lukso/eip191-signer.js";
 import { CHAIN_ID, SIGNER_PRIVATE_KEY, UP_ADDRESS } from "../src/globals";
 
-export const generateExecuteBody = async () => {
+export const generateExecuteParameters = async () => {
   const provider = getProvider();
 
   const universalProfile = UniversalProfile__factory.connect(
@@ -24,10 +24,8 @@ export const generateExecuteBody = async () => {
     provider
   );
   const wallet = new Wallet(SIGNER_PRIVATE_KEY, provider);
-  const walletAddress = wallet.address;
-  console.log(
-    `💳 Wallet address signing transaction (Need permission on the UP_ADDRESS): ${walletAddress}`
-  );
+  const walletAddress = wallet.address; /// Need permission on UP_ADDRESS
+  console.log(`💳 Wallet address signing transaction : ${walletAddress}`);
 
   let nonce: BigNumber;
   try {
