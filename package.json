@@ -6,12 +6,13 @@
   "author": "Magali Morin",
   "scripts": {
     "generate-types": "typechain --target ethers-v5 --out-dir 'types/ethers-v5' './node_modules/@lukso/lsp-smart-contracts/artifacts/*.json'",
-    "dev": "yarn run generate-types && npx nodemon -r dotenv/config src/app.ts"
+    "dev": "yarn run generate-types && npx nodemon -r dotenv/config src/app.ts",
+    "build": "tsc -p tsconfig.json",
+    "execute": "npx ts-node scripts/execute-relay-call/execute.ts",
+    "deploy-up": "npx ts-node scripts/deploy-up/deploy-up.ts"
   },
   "dependencies": {
-    "@erc725/erc725.js": "^0.18.0",
     "@lukso/eip191-signer.js": "^0.2.2",
-    "@lukso/lsp-factory.js": "^2.5.1",
     "@lukso/lsp-smart-contracts": "^0.11.1",
     "@types/express": "^4.17.16",
     "@types/node": "^18.11.18",
