@@ -14,10 +14,12 @@ const execute = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.log(
       "❌ An error occured when executing transaction.",
-      error.message
+      error?.message
     );
-    if (error.message.includes("Transaction in progress")) {
-      res.status(httpStatus.TOO_MANY_REQUESTS).send({ message: error.message });
+    if (error?.message.includes("Transaction in progress")) {
+      res
+        .status(httpStatus.TOO_MANY_REQUESTS)
+        .send({ message: error?.message });
       return;
     }
 

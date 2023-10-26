@@ -1,4 +1,4 @@
-import { BigNumber, Wallet, ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import {
   LSP6KeyManager__factory,
   UniversalProfile__factory,

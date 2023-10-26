@@ -1,20 +1,24 @@
 import { BigNumber, Wallet, ethers } from "ethers";
-import { getProvider } from "../src/libs/ethers.service";
+import { getProvider } from "../../src/libs/ethers.service";
 import {
   LSP6KeyManager__factory,
   UniversalProfile__factory,
-} from "../types/ethers-v5";
+} from "../../types/ethers-v5";
 import { EIP191Signer } from "@lukso/eip191-signer.js";
-import { CHAIN_ID, USER_PRIVATE_KEY, UP_ADDRESS } from "../src/globals";
+import { CHAIN_ID } from "../../src/globals";
 
-export const generateExecuteParameters = async () => {
+export const generateExecuteParameters = async (
+  universalProfileAddress: string,
+  userPrivateKey: string,
+  abi?: string
+) => {
   const provider = getProvider();
 
   const universalProfile = UniversalProfile__factory.connect(
-    UP_ADDRESS,
+    universalProfileAddress,
     provider
   );
-  console.log(`🆙 Universal Profile address : ${UP_ADDRESS}`);
+  console.log(`🆙 Universal Profile address : ${universalProfileAddress}`);
 
   const keyManagerAddress = await universalProfile.owner();
   console.log(`🔑 Key Manager address : ${keyManagerAddress}`);
@@ -23,8 +27,8 @@ export const generateExecuteParameters = async () => {
     keyManagerAddress,
     provider
   );
-  const wallet = new Wallet(USER_PRIVATE_KEY, provider);
-  const walletAddress = wallet.address; /// Need permission on UP_ADDRESS
+  const wallet = new Wallet(userPrivateKey, provider);
+  const walletAddress = wallet.address;
   console.log(`💳 Wallet address signing transaction : ${walletAddress}`);
 
   let nonce: BigNumber;
@@ -36,10 +40,12 @@ export const generateExecuteParameters = async () => {
     );
   }
 
-  const abiPayload = universalProfile.interface.encodeFunctionData("setData", [
-    "0xcafecafecafecafecafecafecafecafecafecafecafecafecafecafecafecafe",
-    "0xcafecafe",
-  ]);
+  if (!abi) {
+    abi = universalProfile.interface.encodeFunctionData("setData", [
+      "0xcafecafecafecafecafecafecafecafecafecafecafecafecafecafecafecafe",
+      "0xcafecafe",
+    ]);
+  }
 
   const validityTimestamps = 0;
 
@@ -51,7 +57,7 @@ export const generateExecuteParameters = async () => {
       nonce,
       validityTimestamps,
       0, // the amount of native tokens to transfer (in Wei)
-      abiPayload,
+      abi,
     ]
   );
 
@@ -59,18 +65,18 @@ export const generateExecuteParameters = async () => {
   const { signature } = eip191Signer.signDataWithIntendedValidator(
     keyManagerAddress,
     message,
-    USER_PRIVATE_KEY // This address needs permissions on the UP_ADDRESS
+    userPrivateKey // This address needs permissions on the universalProfileAddress
   );
 
   const transactionObject = {
-    abi: abiPayload,
+    abi,
     signature: signature,
     nonce, // Nonce has to be a Big number
     validityTimestamps,
   };
 
   return {
-    address: UP_ADDRESS,
+    address: universalProfileAddress,
     transaction: transactionObject,
   };
 };
