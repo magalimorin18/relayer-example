@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 
 import { getProvider } from "./ethers.service";
-import { CHAIN_ID, SIGNER_PRIVATE_KEY } from "../globals";
+import { CHAIN_ID, RELAYER_PRIVATE_KEY } from "../globals";
 import { SigningRequest, SigningResponse } from "../interface";
 
 let signer: ethers.Wallet;
@@ -9,12 +9,12 @@ let signer: ethers.Wallet;
 async function getSigner() {
   const provider = getProvider();
 
-  if (!SIGNER_PRIVATE_KEY) {
-    throw new Error("Error: No signing key set");
+  if (!RELAYER_PRIVATE_KEY) {
+    throw new Error("No signing key set");
   }
 
   if (!signer) {
-    signer = new ethers.Wallet(SIGNER_PRIVATE_KEY, provider);
+    signer = new ethers.Wallet(RELAYER_PRIVATE_KEY, provider);
   }
 
   return signer;
@@ -61,10 +61,8 @@ export async function signTransaction(
     from: signerAddress,
     nonce: signerNonce,
     gasLimit,
-    // value: ethers.utils.hexlify(0),
     value: 0,
     type: 2,
-    // chainId: (await provider.getNetwork()).chainId,
     chainId: Number.parseInt(CHAIN_ID),
     data: transactionData,
   };
