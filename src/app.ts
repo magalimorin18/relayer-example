@@ -1,7 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import http from "http";
 import { AddressInfo } from "net";
-import executeController from "./execute/execute.controller";
+import executeController from "./execute-relay-call/execute.controller";
+import deployUpController from "./deploy-up/deploy-up.controller";
 
 const host = process.env.HOST || "0.0.0.0";
 const port = process.env.PORT || "3000";
@@ -27,6 +28,7 @@ const startServer = () => {
   const app = createApp();
 
   app.use("/", executeController);
+  app.use("/", deployUpController);
 
   const server = http.createServer(app).listen({ host, port }, () => {
     const serverInfo = server.address() as AddressInfo;
