@@ -1,4 +1,4 @@
-import { BigNumber } from "ethers";
+import { BigNumber, BytesLike } from "ethers";
 
 export interface TransactionParameters {
   abi: string;
@@ -22,4 +22,25 @@ export interface SigningResponse {
   signerSignature: string;
   signerAddress: string;
   nonce: number;
+}
+export interface DeployUpRequest {
+  controllers: Controllers[];
+  lsp3ProfileMetadata?: string;
+}
+
+export interface DeployUpResponse {
+  universalProfileAddress: string;
+  keyManagerAddress: string;
+  transactionHash: string;
+}
+
+export interface ExecuteRequest {
+  universalProfileAddress: string;
+  userPrivateKey: string;
+  abi?: string;
+}
+
+export interface Controllers {
+  address: string;
+  permissions: BytesLike;
 }
