@@ -1,5 +1,5 @@
 import { ERC725YDataKeys } from "@lukso/lsp-smart-contracts";
-import { BigNumber, Signer, Wallet } from "ethers";
+import { BigNumber, Wallet } from "ethers";
 import {
   BytesLike,
   defaultAbiCoder,

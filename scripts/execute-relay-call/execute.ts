@@ -1,3 +1,11 @@
+//-------------------------------INPUTS TO SET--------------------------------------------
+const inputs: ExecuteRequest = {
+  universalProfileAddress: "0xda09F6F4acC07647C275319A7176A2D96E7cbA5c",
+  userPrivateKey:
+    "0x04a3042380a01c4600df3cd06a86755f51426493d8a0ba12118f47f64d84471e",
+};
+//---------------------------------------------------------------------------
+
 /**
  * This script executes a relay call on a Universal Profile based on the inputs variable.
  * An example of the structure of the inputs can be found in scripts/execute-relay-call/example-inputs.json. It needs to be of type ExecuteRequest.
@@ -26,18 +34,6 @@ import {
 } from "../../src/globals";
 import { generateExecuteParameters } from "./generate-body-execute";
 import { ExecuteRequest } from "../../src/interface";
-
-//-------------------------------INPUTS TO SET--------------------------------------------
-const inputs: ExecuteRequest = {
-  universalProfileAddress: "0xda09F6F4acC07647C275319A7176A2D96E7cbA5c",
-  // The user private key needs to have permissions on the universal profile to execute the abi passed as input.
-  // If no abi is passed as input the user private key needs SET_DATA permission on the universal Profile address.
-  userPrivateKey:
-    "0x04a3042380a01c4600df3cd06a86755f51426493d8a0ba12118f47f64d84471e",
-  //Optional : abi to execute. If you don't specify this variable then a default SET_DATA abi will be executed on the universal profile.
-  // abi : '...'
-};
-//---------------------------------------------------------------------------
 
 const checkInputVariables = () => {
   if (!inputs?.universalProfileAddress) {

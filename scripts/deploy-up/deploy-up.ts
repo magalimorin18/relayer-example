@@ -1,3 +1,27 @@
+//-------------------------------INPUTS TO SET--------------------------------------------
+const inputs: DeployUpRequest = {
+  controllers: [
+    {
+      address: "0x479a0BD32ba791E92d8bF9BF263eF63780182645",
+      permissions:
+        "0x0000000000000000000000000000000000000000000000000000000000040000",
+    },
+    {
+      address: "0xDD06fC1f047103ea047654c57C6f6F754E91CD24",
+      permissions:
+        "0x00000000000000000000000000000000000000000000000000000000003f3f7f",
+    },
+    {
+      address: "0x55535425c795C972b2723492e76f0c8D61dBFFB4",
+      permissions:
+        "0x00000000000000000000000000000000000000000000000000000000003f3f7f",
+    },
+  ],
+  lsp3ProfileMetadata:
+    "0x6f357c6ae8b1db2db7ce8a555019ab31c557e9934145c0baa7fdae3f1a131e736d3d4e8e697066733a2f2f516d583543365939614a35646879697533546446704b6258797653434345386a435477514436374743784d705a31",
+};
+//---------------------------------------------------------------------------
+
 /**
  * This script deploys a Universal Profiles based on the inputs variable.
  * An example of the structure of the inputs can be found in scripts/deploy-up/example-inputs.json.
@@ -6,8 +30,6 @@
  * Parameters :
  *`controllers` : A list of controller addresses with permissions to be set on the deployed Universal Profile.
  *`lsp3ProfileMetadata`: optional. LSP3 Metadata to set on the deployed Universal Profile.
- *
- *
  *
  * To execute the script by running the command :
  * `yarn run deploy-up`
@@ -44,30 +66,6 @@ const checkEnvVariables = () => {
     throw new Error("No CHAIN_ID provided.");
   }
 };
-
-//-------------------------------INPUTS TO SET--------------------------------------------
-const inputs: DeployUpRequest = {
-  controllers: [
-    {
-      address: "0x479a0BD32ba791E92d8bF9BF263eF63780182645",
-      permissions:
-        "0x0000000000000000000000000000000000000000000000000000000000040000",
-    },
-    {
-      address: "0xDD06fC1f047103ea047654c57C6f6F754E91CD24",
-      permissions:
-        "0x00000000000000000000000000000000000000000000000000000000003f3f7f",
-    },
-    {
-      address: "0x55535425c795C972b2723492e76f0c8D61dBFFB4",
-      permissions:
-        "0x00000000000000000000000000000000000000000000000000000000003f3f7f",
-    },
-  ],
-  lsp3ProfileMetadata:
-    "0x6f357c6ae8b1db2db7ce8a555019ab31c557e9934145c0baa7fdae3f1a131e736d3d4e8e697066733a2f2f516d583543365939614a35646879697533546446704b6258797653434345386a435477514436374743784d705a31",
-};
-//---------------------------------------------------------------------------
 
 const main = async () => {
   checkEnvVariables();

@@ -29,6 +29,7 @@ export const generateExecuteParameters = async (
     keyManagerAddress,
     provider
   );
+
   const wallet = new Wallet(userPrivateKey, provider);
   const walletAddress = wallet.address;
   console.log(`💳 Wallet address signing transaction : ${walletAddress}`);
