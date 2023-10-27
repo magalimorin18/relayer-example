@@ -75,9 +75,8 @@ const main = async () => {
     console.log("⏳ Sending Execute Relay Call request ...");
     response = await axios.post(RELAYER_BASE_URL + "/execute", body);
   } catch (error: any) {
-    console.log(
-      `❌ Error executing /execute endpoint: ${error.response.data.message}`
-    );
+    console.log(`❌ Error executing /execute endpoint`);
+    error?.response?.data?.message && console.log(error.response.data.message);
     return;
   }
 

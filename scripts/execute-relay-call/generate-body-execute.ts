@@ -6,6 +6,8 @@ import {
 } from "../../types/ethers-v5";
 import { EIP191Signer } from "@lukso/eip191-signer.js";
 import { CHAIN_ID } from "../../src/globals";
+import { ERC725YDataKeys } from "@lukso/lsp-smart-contracts";
+import { DEFAULT_LSP3_PROFILE_DATA } from "./constants";
 
 export const generateExecuteParameters = async (
   universalProfileAddress: string,
@@ -42,8 +44,8 @@ export const generateExecuteParameters = async (
 
   if (!abi) {
     abi = universalProfile.interface.encodeFunctionData("setData", [
-      "0xcafecafecafecafecafecafecafecafecafecafecafecafecafecafecafecafe",
-      "0xcafecafe",
+      ERC725YDataKeys.LSP3.LSP3Profile,
+      DEFAULT_LSP3_PROFILE_DATA,
     ]);
   }
 

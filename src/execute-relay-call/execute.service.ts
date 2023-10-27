@@ -39,7 +39,7 @@ export const executeTransaction = async (
       transaction.abi
     );
   } catch (error) {
-    gasLimit = new BigNumber(3000000, "0x0103e8");
+    gasLimit = BigNumber.from(3000000);
     console.log(
       "⏭️ Unable to estimate gas. Setting default value to gas Limit"
     );
