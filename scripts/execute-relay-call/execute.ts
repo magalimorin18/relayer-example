@@ -1,28 +1,23 @@
-//-------------------------------INPUTS TO SET--------------------------------------------
-const inputs: ExecuteRequest = {
-  universalProfileAddress: "0xda09F6F4acC07647C275319A7176A2D96E7cbA5c",
-  userPrivateKey:
-    "0x04a3042380a01c4600df3cd06a86755f51426493d8a0ba12118f47f64d84471e",
-};
-//---------------------------------------------------------------------------
-
 /**
  * This script executes a relay call on a Universal Profile based on the inputs variable.
- * An example of the structure of the inputs can be found in scripts/execute-relay-call/example-inputs.json. It needs to be of type ExecuteRequest.
+ * An example of the structure of the inputs can be found in scripts/execute-relay-call/example-execute-inputs.json. It needs to be of type ExecuteRequest.
  *
  * Parameters :
  *`universalProfileAddress` : Universal Profile on which you want to execute an abi.
  *`userPrivateKey` : private key to sign the executeRelayCall message. This key needs to have permission on the universalProfileAddress to execute the payload. This key doesnt need to have LYX on it.
  *`abi`: optional. An abi to execute on the universal profile. By default, a SET_DATA will be executed.
  *
- * IMPORTANT : If you don't specify an abi parameters in the inputs variable then make sure your private key has the SET_DATA
- * permission on the Universal Profile because a default abi SET_DATA will be executed as the execute relay call.
+ * IMPORTANT : If you don't specify an abi parameters in the inputs variable, make sure the userPrivateKey has SET_DATA
+ * permission on the Universal Profile as by default a SET_DATA transaction will be executed as the execute relay call.
  *
- * To execute the script by running the command :
- * `yarn run execute`
-
+ * ⚠️ Update from the oral prensentation: The parameters are loaded from the json file directly.
+ * To execute the script:
+ * `yarn run execute example-execute-inputs.json`
+ *
+ * The file example-execute-inputs.json needs to be in the same folder as execute.ts file.
+ *
  * It is important that the userPrivateKey in the inputs has permissions to execute the payload you want on the Universal Profile.
- * e.g. if the payload sets data on the Universal Profile then the user private key needs SET_DATA permission.
+ * e.g. if you choose to execute a payload that TRANSFER_VALUE on the Universal Profile then the user private key needs TRANSFER_VALUE permission.
  *
  */
 
@@ -35,7 +30,18 @@ import {
 import { generateExecuteParameters } from "./generate-body-execute";
 import { ExecuteRequest } from "../../src/interface";
 
-const checkInputVariables = () => {
+const fileName = process.argv[2];
+
+const checkInputVariables = async () => {
+  if (!fileName) {
+    throw new Error(
+      "Please specify the file name containing the execute parameters."
+    );
+  }
+  const filePath = "./" + fileName;
+  console.log("📁 Loading execute parameters from path:", filePath);
+  const inputs: ExecuteRequest = await import(filePath);
+
   if (!inputs?.universalProfileAddress) {
     throw new Error(
       "No universalProfileAddress provided in the inputs variable."
@@ -45,7 +51,10 @@ const checkInputVariables = () => {
   if (!inputs?.userPrivateKey) {
     throw new Error("No userPrivateKey provided in the inputs variable.");
   }
+
+  return inputs;
 };
+
 const checkEnvVariables = () => {
   if (!RELAYER_PRIVATE_KEY) {
     throw new Error("No RELAYER_PRIVATE_KEY provided.");
@@ -57,7 +66,7 @@ const checkEnvVariables = () => {
 };
 
 const main = async () => {
-  checkInputVariables();
+  const inputs = await checkInputVariables();
   checkEnvVariables();
 
   const body = await generateExecuteParameters(

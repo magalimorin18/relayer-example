@@ -1,42 +1,21 @@
-//-------------------------------INPUTS TO SET--------------------------------------------
-const inputs: DeployUpRequest = {
-  controllers: [
-    {
-      address: "0x479a0BD32ba791E92d8bF9BF263eF63780182645",
-      permissions:
-        "0x0000000000000000000000000000000000000000000000000000000000040000",
-    },
-    {
-      address: "0xDD06fC1f047103ea047654c57C6f6F754E91CD24",
-      permissions:
-        "0x00000000000000000000000000000000000000000000000000000000003f3f7f",
-    },
-    {
-      address: "0x55535425c795C972b2723492e76f0c8D61dBFFB4",
-      permissions:
-        "0x00000000000000000000000000000000000000000000000000000000003f3f7f",
-    },
-  ],
-  lsp3ProfileMetadata:
-    "0x6f357c6ae8b1db2db7ce8a555019ab31c557e9934145c0baa7fdae3f1a131e736d3d4e8e697066733a2f2f516d583543365939614a35646879697533546446704b6258797653434345386a435477514436374743784d705a31",
-};
-//---------------------------------------------------------------------------
-
 /**
  * This script deploys a Universal Profiles based on the inputs variable.
- * An example of the structure of the inputs can be found in scripts/deploy-up/example-inputs.json.
+ * An example of the structure of the inputs can be found in scripts/deploy-up/example-up-inputs.json.
  * It needs to be of type DeployUpRequest.
  *
  * Parameters :
  *`controllers` : A list of controller addresses with permissions to be set on the deployed Universal Profile.
  *`lsp3ProfileMetadata`: optional. LSP3 Metadata to set on the deployed Universal Profile.
  *
- * To execute the script by running the command :
- * `yarn run deploy-up`
+ * ⚠️ Update from the oral prensentation: The parameters are loaded from the json file directly.
+ * To execute the script:
+ * `yarn run deploy-up example-up-inputs.json`
  *
- * - The script will deploy a Universal Profile with controller addresses from the example-inputs.json file
+ * The file example-up-inputs.json needs to be in the same folder as deploy-up.ts file.
+ *
+ * - The script will deploy a Universal Profile with controller addresses from the example-up-inputs.json file
  * and assign then the permissions you set.
- * e.g. If in the file example-inputs.json you set in the controllers array :
+ * e.g. If in the file example-up-inputs.json you set in the controllers array :
  *    {
  *     "address": "0x479a0BD32ba791E92d8bF9BF263eF63780182645",
  *    "permissions": "0x0000000000000000000000000000000000000000000000000000000000040000"
@@ -58,6 +37,31 @@ import {
 } from "../../src/globals";
 import { DeployUpRequest, DeployUpResponse } from "../../src/interface";
 
+const fileName = process.argv[2];
+
+const checkInputVariables = async () => {
+  if (!fileName) {
+    throw new Error(
+      "Please specify the file name containing the deploy-up parameters."
+    );
+  }
+  const filePath = "./" + fileName;
+  console.log("📁 Loading deploy-up parameters from path:", filePath);
+  const inputs: DeployUpRequest = await import(filePath);
+
+  if (!inputs?.controllers) {
+    throw new Error("No controllers provided in the inputs variable.");
+  }
+
+  inputs.controllers.forEach((controller) => {
+    if (!controller?.address || !controller?.permissions) {
+      throw new Error("Invalid input parameters for controllers.");
+    }
+  });
+
+  return inputs;
+};
+
 const checkEnvVariables = () => {
   if (!RELAYER_PRIVATE_KEY) {
     throw new Error("No RELAYER_PRIVATE_KEY provided.");
@@ -68,6 +72,7 @@ const checkEnvVariables = () => {
 };
 
 const main = async () => {
+  const inputs = await checkInputVariables();
   checkEnvVariables();
 
   let response;

@@ -47,10 +47,12 @@ Parameters to set:
 }
 ```
 
+⚠️ Update from the oral prensentation: The parameters are loaded from the json file directly. <file-name.json> needs to be located in the same folder as the execute.ts file.
+
 Execute the script :
 
 ```sh
-yarn run execute
+yarn run execute <file-name.json>
 ```
 
 Find more information on this script : `scripts/execute-relay-call/execute.ts`
@@ -76,8 +78,10 @@ Encode and decode permissions: [ERC725-Inspect](https://erc725-inspect.lukso.tec
 
 Execute the script:
 
+⚠️ Update from the oral prensentation: The parameters are loaded from the json file directly. <file-name.json> needs to be located in the same folder as the execute.ts file.
+
 ```sh
-yarn run deploy-up
+yarn run deploy-up <file-name.json>
 ```
 
 Find more information on this script : `scripts/deploy-up/deploy-up.ts`
