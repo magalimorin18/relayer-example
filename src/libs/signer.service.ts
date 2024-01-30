@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 
 import { getProvider } from "./ethers.service";
-import { CHAIN_ID, RELAYER_PRIVATE_KEY } from "../globals";
+import { RELAYER_PRIVATE_KEY } from "../globals";
 import { SigningRequest, SigningResponse } from "../interface";
 
 let signer: ethers.Wallet;
@@ -30,7 +30,8 @@ export async function signTransaction(
   try {
     signerBalanceInWei = await signer.getBalance();
   } catch (error) {
-    throw new Error(`❌ Unable to get signing key balance. ${error}`);
+    console.log("❌ Unable to get signing key balance.");
+    throw error;
   }
 
   console.log(
@@ -53,8 +54,10 @@ export async function signTransaction(
   try {
     signerNonce = await provider.getTransactionCount(signerAddress);
   } catch (error) {
-    throw Error(`❌ Unable to get signing key nonce. ${error}`);
+    console.log("❌ Unable to get signing key nonce.");
+    throw error;
   }
+  const chainId = (await provider.getNetwork()).chainId;
 
   const transactionParameters = {
     to,
@@ -63,7 +66,7 @@ export async function signTransaction(
     gasLimit,
     value: 0,
     type: 2,
-    chainId: Number.parseInt(CHAIN_ID),
+    chainId,
     data: transactionData,
   };
 
@@ -73,18 +76,16 @@ export async function signTransaction(
       transactionParameters
     );
   } catch (error) {
-    throw Error(
-      `❌ Unable to populate transaction ${transactionParameters}. ${error}`
-    );
+    console.log(`❌ Unable to populate transaction ${transactionParameters}.`);
+    throw error;
   }
 
   let signerSignature: string;
   try {
     signerSignature = await signer.signTransaction(populatedTransaction);
   } catch (error) {
-    throw Error(
-      `❌ Error signing transaction ${populatedTransaction}. ${error}`
-    );
+    console.log(`❌ Error signing transaction ${populatedTransaction}`);
+    throw error;
   }
 
   return {

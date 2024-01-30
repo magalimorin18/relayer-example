@@ -5,8 +5,7 @@ import {
   UniversalProfile__factory,
 } from "../../types/ethers-v5";
 import { EIP191Signer } from "@lukso/eip191-signer.js";
-import { CHAIN_ID } from "../../src/globals";
-import { ERC725YDataKeys } from "@lukso/lsp-smart-contracts";
+import { ERC725YDataKeys, LSP25_VERSION } from "@lukso/lsp-smart-contracts";
 import { DEFAULT_LSP3_PROFILE_DATA } from "./constants";
 
 export const generateExecuteParameters = async (
@@ -51,12 +50,13 @@ export const generateExecuteParameters = async (
   }
 
   const validityTimestamps = 0;
+  const chainId = (await provider.getNetwork()).chainId;
 
   const message = ethers.utils.solidityPack(
     ["uint256", "uint256", "uint256", "uint256", "uint256", "bytes"],
     [
-      25, // LSP25 Version
-      CHAIN_ID,
+      LSP25_VERSION,
+      chainId,
       nonce,
       validityTimestamps,
       0, // the amount of native tokens to transfer (in Wei)

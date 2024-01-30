@@ -22,11 +22,7 @@
  */
 
 import axios from "axios";
-import {
-  CHAIN_ID,
-  RELAYER_BASE_URL,
-  RELAYER_PRIVATE_KEY,
-} from "../../src/globals";
+import { RELAYER_BASE_URL, RELAYER_PRIVATE_KEY } from "../../src/globals";
 import { generateExecuteParameters } from "./generate-body-execute";
 import { ExecuteRequest } from "../../src/interface";
 
@@ -59,10 +55,6 @@ const checkEnvVariables = () => {
   if (!RELAYER_PRIVATE_KEY) {
     throw new Error("No RELAYER_PRIVATE_KEY provided.");
   }
-
-  if (!CHAIN_ID) {
-    throw new Error("No CHAIN_ID provided.");
-  }
 };
 
 const main = async () => {
@@ -80,7 +72,7 @@ const main = async () => {
     console.log("⏳ Sending Execute Relay Call request ...");
     response = await axios.post(RELAYER_BASE_URL + "/execute", body);
   } catch (error: any) {
-    console.log(`❌ Error executing /execute endpoint`);
+    console.log(`❌ Error executing /execute endpoint`, error);
     error?.response?.data?.message && console.log(error.response.data.message);
     return;
   }

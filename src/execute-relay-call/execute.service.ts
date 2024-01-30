@@ -33,10 +33,10 @@ export const executeTransaction = async (
   let gasLimit: BigNumber;
   try {
     gasLimit = await keyManager.estimateGas.executeRelayCall(
-      transaction.signature,
-      transaction.nonce,
+      signature,
+      nonce,
       validityTimestamps,
-      transaction.abi
+      abi
     );
   } catch (error) {
     gasLimit = BigNumber.from(3000000);
@@ -67,7 +67,8 @@ export const executeTransaction = async (
       signedTransaction.signerSignature
     );
   } catch (error) {
-    throw Error(`❌ Error sending transaction to the blockchain. ${error}`);
+    console.log("❌ Error sending transaction to the blockchain.");
+    throw error;
   }
 
   console.log("⏳ Waiting for transaction to be mined...");

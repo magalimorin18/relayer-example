@@ -4,7 +4,7 @@ export interface TransactionParameters {
   abi: string;
   signature: string;
   nonce: BigNumber;
-  validityTimestamps: number;
+  validityTimestamps: string | number;
 }
 
 export interface ExecutePayload {

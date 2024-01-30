@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz#bd9154aec9983f77b3a034ecaa015c2e4201f6cf"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
+"@account-abstraction/contracts@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@account-abstraction/contracts/-/contracts-0.6.0.tgz#7188a01839999226e6b2796328af338329543b76"
+  integrity sha512-8ooRJuR7XzohMDM4MV34I12Ci2bmxfE9+cixakRL7lA4BAwJKQ3ahvd8FbJa9kiwkUPCUNtj+/zxDQWYYalLMQ==
+
 "@babel/code-frame@^7.0.0":
   version "7.22.13"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.22.13.tgz#e3c1c099402598483b7a8c46a721d1038803755e"
@@ -127,10 +132,10 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@erc725/smart-contracts@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/@erc725/smart-contracts/-/smart-contracts-5.2.0.tgz#96ae61b8b7be5c67a5330d54276665aa9939c55c"
-  integrity sha512-ML7eXO2l6GO847CKGTbSO7MxpfVpmZvVPA/4KutYwVkaZmPxB05WC2flPxUilUz7ws0S7xgyt50sPHLA1ffojA==
+"@erc725/smart-contracts@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@erc725/smart-contracts/-/smart-contracts-7.0.0.tgz#60f90dc24f61b13105b49194fa2d41624c53495f"
+  integrity sha512-O/Ki+0JqRStPUHXjdU4JhDUzncLdC33c0xjTRiwWwBYbxL77LlWaPfG96fWp2hF2kdR0zNYvcsnZZds+uj2QMg==
   dependencies:
     "@openzeppelin/contracts" "^4.9.3"
     "@openzeppelin/contracts-upgradeable" "^4.9.3"
@@ -859,12 +864,13 @@
     ethereumjs-util "^7.1.5"
     web3-utils "^1.7.5"
 
-"@lukso/lsp-smart-contracts@^0.11.1":
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.11.1.tgz#f09dc108264c8de9848816f5131170205563560d"
-  integrity sha512-qGmTVjGR6tA+h7o4AAJBuGphcJTfXcVdCpx7yeHvLWW3+3a+KYsCORKKnutAfMwdbIL0W944PVhzq7xx+vVLPg==
+"@lukso/lsp-smart-contracts@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.14.0.tgz#1fb639be057012d4582306c4c76c52de650257d9"
+  integrity sha512-HjMpO/DfcAnL2YAoGSq4TazwsKof3CClyi33cwkOIdH7b81DMP5Z4LLjOjAGURrJlMj8wH4cLp5+4nvZ4NVSIA==
   dependencies:
-    "@erc725/smart-contracts" "^5.2.0"
+    "@account-abstraction/contracts" "^0.6.0"
+    "@erc725/smart-contracts" "^7.0.0"
     "@openzeppelin/contracts" "^4.9.2"
     "@openzeppelin/contracts-upgradeable" "^4.9.2"
     solidity-bytes-utils "0.8.0"

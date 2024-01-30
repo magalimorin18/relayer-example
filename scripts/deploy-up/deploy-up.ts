@@ -30,11 +30,7 @@
  */
 
 import axios from "axios";
-import {
-  CHAIN_ID,
-  RELAYER_BASE_URL,
-  RELAYER_PRIVATE_KEY,
-} from "../../src/globals";
+import { RELAYER_BASE_URL, RELAYER_PRIVATE_KEY } from "../../src/globals";
 import { DeployUpRequest, DeployUpResponse } from "../../src/interface";
 
 const fileName = process.argv[2];
@@ -65,9 +61,6 @@ const checkInputVariables = async () => {
 const checkEnvVariables = () => {
   if (!RELAYER_PRIVATE_KEY) {
     throw new Error("No RELAYER_PRIVATE_KEY provided.");
-  }
-  if (!CHAIN_ID) {
-    throw new Error("No CHAIN_ID provided.");
   }
 };
 
