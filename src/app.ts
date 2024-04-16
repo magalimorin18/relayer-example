@@ -3,9 +3,10 @@ import http from "http";
 import { AddressInfo } from "net";
 import executeController from "./execute-relay-call/execute.controller";
 import deployUpController from "./deploy-up/deploy-up.controller";
+import transactionController from "./transaction/transaction.controller";
 
 const host = process.env.HOST || "0.0.0.0";
-const port = process.env.PORT || "3000";
+const port = process.env.PORT || "3001";
 
 const createApp = () => {
   const app: Express = express();
@@ -29,6 +30,7 @@ const startServer = () => {
 
   app.use("/", executeController);
   app.use("/", deployUpController);
+  app.use("/", transactionController);
 
   const server = http.createServer(app).listen({ host, port }, () => {
     const serverInfo = server.address() as AddressInfo;
