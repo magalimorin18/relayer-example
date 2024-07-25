@@ -2,11 +2,18 @@ import express, { Request, Response } from "express";
 import { ExecutePayload } from "../interface";
 import httpStatus from "http-status";
 import { executeTransaction } from "./execute.service";
+import { executeMiddelware } from "./execute.middelware";
 
 const executeController = express.Router();
 
 const execute = async (req: Request, res: Response) => {
   const { address, transaction } = req.body as ExecutePayload;
+
+  try {
+    await executeMiddelware(address, transaction);
+  } catch (error: any) {
+    res.status(httpStatus.UNAUTHORIZED).send(error?.message);
+  }
 
   try {
     const transactionHash = await executeTransaction(address, transaction);
